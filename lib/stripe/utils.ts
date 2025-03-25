@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { stripe } from "@/lib/stripe/stripe";
 import Stripe from "stripe";
 
-export const toDateTime = (secs: number) => {
+export let toDateTime = (secs: number) => {
   var t = new Date("1970-01-01T00:30:00Z"); // Unix epoch start.
   t.setSeconds(secs);
   return t;
@@ -11,12 +11,12 @@ export const toDateTime = (secs: number) => {
 /**
  * Copies the billing details from the payment method to the customer object.
  */
-export const copyBillingDetailsToCustomer = async (
+export let copyBillingDetailsToCustomer = async (
   uuid: string,
   payment_method: Stripe.PaymentMethod
 ) => {
-  const customer = payment_method.customer as string;
-  const { name, phone, address } = payment_method.billing_details;
+  let customer = payment_method.customer as string;
+  let { name, phone, address } = payment_method.billing_details;
   if (!name || !phone || !address) return;
   await stripe.customers.update(customer, {
     name,
@@ -31,7 +31,7 @@ export const copyBillingDetailsToCustomer = async (
     },
   });
 
-  const user = await prisma.user.update({
+  let user = await prisma.user.update({
     where: { id: uuid },
     data: {
       billing_address: { ...address },
@@ -40,13 +40,13 @@ export const copyBillingDetailsToCustomer = async (
   });
 };
 
-export const manageSubscriptionStatusChange = async (
+export let manageSubscriptionStatusChange = async (
   subscriptionId: string,
   customerId: string,
   createAction = false
 ) => {
   // Get customer's UUID from mapping table.
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     // select: { id: true },
     where: { stripe_customer_id: customerId },
   });
@@ -59,12 +59,12 @@ export const manageSubscriptionStatusChange = async (
     throw new Error("User not found.");
   }
 
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+  let subscription = await stripe.subscriptions.retrieve(subscriptionId, {
     expand: ["default_payment_method"],
   });
 
   // Upsert the latest status of the subscription object.
-  const subscriptionData = {
+  let subscriptionData = {
     id: subscription.id,
     userId: user.id,
     metadata: subscription.metadata,
@@ -96,7 +96,7 @@ export const manageSubscriptionStatusChange = async (
       : null,
   };
 
-  const result = await prisma.subscription.upsert({
+  let result = await prisma.subscription.upsert({
     where: { id: subscriptionData.id },
     create: subscriptionData,
     update: subscriptionData,
@@ -116,12 +116,12 @@ export const manageSubscriptionStatusChange = async (
     );
 };
 
-export const upsertPaymentIntentRecord = async (
+export let upsertPaymentIntentRecord = async (
   paymentIntentId: string,
   customerId: string
 ) => {
   // Get customer's UUID from mapping table.
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: { stripe_customer_id: customerId },
   });
 
@@ -130,12 +130,12 @@ export const upsertPaymentIntentRecord = async (
   }
 
   // Get payment intent from Stripe.
-  const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  let paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
   if (!paymentIntent) {
     throw new Error(`Payment intent not found: ${paymentIntentId}`);
   }
 
-  const payment = {
+  let payment = {
     id: paymentIntentId,
     userId: user.id,
     currency: paymentIntent.currency,
@@ -149,7 +149,7 @@ export const upsertPaymentIntentRecord = async (
   };
 
   // Upsert payment intent record.
-  const paymentIntentRecord = await prisma.payment.upsert({
+  let paymentIntentRecord = await prisma.payment.upsert({
     where: { id: paymentIntentId },
     create: payment,
     update: payment,
