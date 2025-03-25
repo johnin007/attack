@@ -8,12 +8,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 
-const dateSchema = z
+let dateSchema = z
   .string()
   .refine(
     (value) => {
-      const [year, month, day] = value.split("-");
-      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      let [year, month, day] = value.split("-");
+      let date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
       return !isNaN(date.getTime());
     },
     {
@@ -21,11 +21,11 @@ const dateSchema = z
     }
   )
   .transform((value) => {
-    const [year, month, day] = value.split("-");
+    let [year, month, day] = value.split("-");
     return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   });
 
-const QueryParameters = z.object({
+let QueryParameters = z.object({
   search: z.string().optional(),
   sortBy: z.enum(["id", "createdAt", "updatedAt"]).optional(),
   sortOrder: z.enum(["asc", "desc"]).optional(),
@@ -36,7 +36,7 @@ const QueryParameters = z.object({
   end: dateSchema.optional(),
 });
 
-const sortingFields = {
+let sortingFields = {
   id: "id",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
@@ -46,7 +46,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  let session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });
@@ -54,7 +54,7 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const {
+      let {
         search = "",
         sortBy = "createdAt",
         sortOrder = "desc",
@@ -65,9 +65,9 @@ export default async function handler(
         end = "",
       } = QueryParameters.parse(req.query);
 
-      // const skip = (Number(pageNumber) - 1) * Number(pageSize);
-      const where = JSON.parse(filter);
-      const searchFilter = search
+      // let skip = (Number(pageNumber) - 1) * Number(pageSize);
+      let where = JSON.parse(filter);
+      let searchFilter = search
         ? {
             OR: [
               {
@@ -79,7 +79,7 @@ export default async function handler(
           }
         : {};
 
-      const dateFilter: Partial<{
+      let dateFilter: Partial<{
         createdAt?: {
           gte?: Date;
           lte?: Date;
@@ -96,7 +96,7 @@ export default async function handler(
         }
       }
 
-      const requests = await prisma.request.findMany({
+      let requests = await prisma.request.findMany({
         where: {
           userId: session.user.id,
           ...where,
@@ -116,7 +116,7 @@ export default async function handler(
         },
       });
 
-      const filteredUsers: (Partial<Request> & { cost: number })[] = requests
+      let filteredUsers: (Partial<Request> & { cost: number })[] = requests
         .filter(
           (request: any) =>
             request.user_id !== null &&
@@ -136,7 +136,7 @@ export default async function handler(
           };
         });
 
-      const users = filteredUsers.reduce(
+      let users = filteredUsers.reduce(
         (
           acc: {
             [key: string]: {
@@ -171,15 +171,15 @@ export default async function handler(
         {}
       );
 
-      const sortedUsers = Object.values(users).sort(
+      let sortedUsers = Object.values(users).sort(
         (a, b) => b.total_cost - a.total_cost
       );
 
-      const skip = (Number(pageNumber) - 1) * Number(pageSize);
-      const take = Number(pageSize);
-      const paginatedUsers = sortedUsers.slice(skip, skip + take);
+      let skip = (Number(pageNumber) - 1) * Number(pageSize);
+      let take = Number(pageSize);
+      let paginatedUsers = sortedUsers.slice(skip, skip + take);
 
-      const totalCount = sortedUsers.length;
+      let totalCount = sortedUsers.length;
 
       return res.status(200).json({
         users: paginatedUsers,
