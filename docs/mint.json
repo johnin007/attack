@@ -1,0 +1,66 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "llm.report Documentation",
+  "logo": {
+    "dark": "logo/logo-dark.png",
+    "light": "logo/logo-light.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#f59e0b",
+    "light": "#f59e0b",
+    "dark": "#0D001D",
+    "background": {
+      "dark": "#090014"
+    },
+    "anchors": {
+      "from": "#dc2626",
+      "to": "#f59e0b"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Discord",
+      "url": "https://discord.gg/eVtDPmRWXm"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://llm.report"
+  },
+  "anchors": [
+    {
+      "name": "Github",
+      "icon": "github",
+      "url": "https://github.com/dillionverma/llm.report"
+    },
+    {
+      "name": "Discord",
+      "icon": "discord",
+      "url": "https://discord.gg/eVtDPmRWXm"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": ["introduction"]
+    },
+    {
+      "group": "No-Code",
+      "pages": ["features/openai"]
+    },
+    {
+      "group": "Advanced",
+      "pages": ["features/logs", "features/users"]
+    },
+    {
+      "group": "API Reference",
+      "pages": ["api/authentication", "api/requests"]
+    }
+  ],
+  "footerSocials": {
+    "twitter": "https://twitter.com/llmreport",
+    "github": "https://github.com/dillionverma/llm.report",
+    "linkedin": "https://linkedin.com/company/llm-report"
+  }
+}
