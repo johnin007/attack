@@ -4,14 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { endOfMonth, format, startOfMonth } from "date-fns";
 
-export const useLogCount = ({
+export let useLogCount = ({
   start = startOfMonth(new Date()),
   end = endOfMonth(new Date()),
 }: {
   start?: Date;
   end?: Date;
 }) => {
-  const params = new URLSearchParams({
+  let params = new URLSearchParams({
     start: format(start, "yyyy-MM-dd"),
     end: format(end, "yyyy-MM-dd"),
   });
