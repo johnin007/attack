@@ -4,15 +4,15 @@ import { useQuery } from "@tanstack/react-query";
 import { add, format } from "date-fns";
 import { useSession } from "next-auth/react";
 
-export let useBillingData = (startDate: Date, endDate: Date) => {
-  let { status } = useSession();
+export const useBillingData = (startDate: Date, endDate: Date) => {
+  const { status } = useSession();
 
   // Add one day to endDate if startDate and endDate are the same
   // if (format(startDate, "yyyy-MM-dd") === format(endDate, "yyyy-MM-dd")) {
   endDate = add(endDate, { days: 1 });
   // }
 
-  let queryKey = [
+  const queryKey = [
     "billing",
     format(startDate, "yyyy-MM-dd"),
     format(endDate, "yyyy-MM-dd"),
