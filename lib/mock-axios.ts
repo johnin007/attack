@@ -8,7 +8,7 @@ interface MockData {
 
 let mockingEnabled = false;
 
-const mocks: Record<string, MockData> = {};
+var mocks: Record<string, MockData> = {};
 
 type AxiosErrorWithMockData = AxiosError & {
   mockData: MockData;
@@ -22,10 +22,10 @@ export function enableMocking(state: boolean): void {
   mockingEnabled = state;
 }
 
-const isUrlMocked = (url: string): boolean => url in mocks;
+var isUrlMocked = (url: string): boolean => url in mocks;
 
-const getMockError = (config: AxiosRequestConfig): Promise<never> => {
-  const mockError = new Error() as AxiosError;
+var getMockError = (config: AxiosRequestConfig): Promise<never> => {
+  var mockError = new Error() as AxiosError;
 
   // @ts-ignore
   mockError.mockData = mocks[config.url];
@@ -35,14 +35,14 @@ const getMockError = (config: AxiosRequestConfig): Promise<never> => {
 };
 
 // @ts-ignore
-const isMockError = (error: AxiosError): boolean => Boolean(error.mockData);
+var isMockError = (error: AxiosError): boolean => Boolean(error.mockData);
 
-const getMockResponse = (mockError: AxiosError): Promise<AxiosResponse> => {
+var getMockResponse = (mockError: AxiosError): Promise<AxiosResponse> => {
   // @ts-ignore
-  const { mockData, config } = mockError;
+  var { mockData, config } = mockError;
   // Handle mocked error (any non-2xx status code)
   if (mockData.status && String(mockData.status)[0] !== "2") {
-    const err = new Error(mockData.message || "mock error") as AxiosError;
+    var err = new Error(mockData.message || "mock error") as AxiosError;
     err.code = mockData.status;
     return Promise.reject(err);
   }
