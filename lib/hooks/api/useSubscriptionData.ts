@@ -3,8 +3,8 @@ import openai, { OpenAI } from "@/lib/services/openai";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
-export const useSubscriptionData = () => {
-  const { status } = useSession();
+export let useSubscriptionData = () => {
+  let { status } = useSession();
 
   return useQuery({
     // @ts-ignore
