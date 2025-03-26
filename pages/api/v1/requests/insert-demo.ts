@@ -7,15 +7,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  let session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });
   }
 
   if (req.method === "POST") {
-    const user_id = req.body.user_id || null;
-    const request = await prisma.request.create({
+    let user_id = req.body.user_id || null;
+    let request = await prisma.request.create({
       data: {
         user: {
           connect: {
