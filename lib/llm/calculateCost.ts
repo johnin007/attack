@@ -46,7 +46,7 @@ interface CostReq {
   output?: number | null;
 }
 
-export const MODEL_COSTS: CostPerUnit = {
+export let MODEL_COSTS: CostPerUnit = {
   "gpt-4o-2024-05-13": {
     prompt: 0.005 / 1000,
     completion: 0.015 / 1000,
@@ -97,8 +97,8 @@ export const MODEL_COSTS: CostPerUnit = {
   },
 };
 
-export const getModelCost = (model: string) => {
-  const cost = MODEL_COSTS[model];
+export let getModelCost = (model: string) => {
+  let cost = MODEL_COSTS[model];
 
   if (cost) {
     return cost;
@@ -129,16 +129,16 @@ export const getModelCost = (model: string) => {
   }
 };
 
-export const calculateCost = ({ model, input, output }: CostReq): number => {
+export let calculateCost = ({ model, input, output }: CostReq): number => {
   if (!model || !input || !output) return 0;
-  const cost = getModelCost(model)!;
+  let cost = getModelCost(model)!;
 
   if (typeof cost === "number") {
     if (!input) throw new Error("Input tokens are required");
     return cost * input;
   } else {
-    const promptCost = cost.prompt * input;
-    const completionCost = cost.completion * output;
+    let promptCost = cost.prompt * input;
+    let completionCost = cost.completion * output;
     return promptCost + completionCost;
   }
 };
