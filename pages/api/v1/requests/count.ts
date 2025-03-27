@@ -5,12 +5,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 
-const dateSchema = z
+let dateSchema = z
   .string()
   .refine(
     (value) => {
-      const [year, month, day] = value.split("-");
-      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      let [year, month, day] = value.split("-");
+      let date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
       return !isNaN(date.getTime());
     },
     {
@@ -18,11 +18,11 @@ const dateSchema = z
     }
   )
   .transform((value) => {
-    const [year, month, day] = value.split("-");
+    let [year, month, day] = value.split("-");
     return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   });
 
-const QueryParameters = z.object({
+let QueryParameters = z.object({
   start: dateSchema.optional(),
   end: dateSchema.optional(),
 });
@@ -31,7 +31,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  let session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });
@@ -39,9 +39,9 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const { start = "", end = "" } = QueryParameters.parse(req.query);
+      let { start = "", end = "" } = QueryParameters.parse(req.query);
 
-      const dateFilter: Partial<{
+      let dateFilter: Partial<{
         createdAt?: {
           gte?: Date;
           lte?: Date;
@@ -58,7 +58,7 @@ export default async function handler(
         }
       }
 
-      const count = await prisma.request.count({
+      let count = await prisma.request.count({
         where: {
           userId: session.user.id,
           ...dateFilter,
