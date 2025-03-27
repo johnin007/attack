@@ -10,7 +10,7 @@ import EmailProvider from "next-auth/providers/email";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-export const authOptions: NextAuthOptions = {
+export let authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma as PrismaClient),
   pages: {
     signIn: "/login",
@@ -55,13 +55,13 @@ export const authOptions: NextAuthOptions = {
               req
             ) {
               if (credentials === undefined) return null;
-              const existingUser = await prisma?.user.findUnique({
+              let existingUser = await prisma?.user.findUnique({
                 where: { email: credentials.email.toLowerCase() },
               });
 
               if (!existingUser) return null;
 
-              const isValid = credentials.password === existingUser.password;
+              let isValid = credentials.password === existingUser.password;
 
               if (!isValid) return null;
 
@@ -82,7 +82,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async jwt({ token, user }) {
-      const dbUser = await prisma?.user.findFirst({
+      let dbUser = await prisma?.user.findFirst({
         where: {
           email: token.email,
         },
@@ -106,18 +106,18 @@ export const authOptions: NextAuthOptions = {
   events: {
     signIn: async ({ profile, account, user }) => {
       if (account?.provider === "github" && profile) {
-        const res = await fetch("https://api.github.com/user/emails", {
+        let res = await fetch("https://api.github.com/user/emails", {
           headers: { Authorization: `token ${account.access_token}` },
         });
 
-        const emails = await res.json();
+        let emails = await res.json();
 
         if (emails?.length > 0) {
           profile.email = emails.sort(
             (a: any, b: any) => b.primary - a.primary
           )[0].email;
 
-          const updatedUser = await prisma?.user.upsert({
+          let updatedUser = await prisma?.user.upsert({
             where: { id: user.id },
             update: {
               email: profile.email,
