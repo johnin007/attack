@@ -7,14 +7,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  let session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });
   }
 
   if (req.method === "GET") {
-    const metadataKeys: { metadata_key: string }[] = await prisma.$queryRaw`
+    let metadataKeys: { metadata_key: string }[] = await prisma.$queryRaw`
       WITH keys AS (
           SELECT 
               jsonb_object_keys(request_headers) AS metadata_key
@@ -30,7 +30,7 @@ export default async function handler(
     `;
 
     // Strip the "x-metadata-" prefix from the metadata keys
-    const metadata = [...new Set(metadataKeys.map((m) => m.metadata_key))];
+    let metadata = [...new Set(metadataKeys.map((m) => m.metadata_key))];
 
     console.log(JSON.stringify(metadata, null, 2));
 
