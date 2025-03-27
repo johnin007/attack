@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   async function middleware(req) {
-    var token = await getToken({ req });
-    var isAuth = !!token;
-    var isAuthPage =
+    const token = await getToken({ req });
+    const isAuth = !!token;
+    const isAuthPage =
       req.nextUrl.pathname.startsWith("/login") ||
       req.nextUrl.pathname.startsWith("/register");
 
@@ -41,6 +41,6 @@ export default withAuth(
   }
 );
 
-export var config = {
+export const config = {
   matcher: ["/login", "/register"],
 };
