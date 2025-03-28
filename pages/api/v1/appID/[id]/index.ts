@@ -13,7 +13,7 @@ type QueryParameters = {
   filter?: string;
 };
 
-const sortingFields = {
+let sortingFields = {
   id: "id",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
@@ -28,14 +28,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  let session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });
   }
 
   if (req.method === "GET") {
-    const {
+    let {
       user_id = "",
       search = "",
       sortBy = "createdAt",
@@ -45,9 +45,9 @@ export default async function handler(
       filter = "{}",
     }: QueryParameters = req.query as unknown as QueryParameters;
 
-    const skip = (Number(pageNumber) - 1) * Number(pageSize);
-    // const where = isEmpty(JSON.parse(filter)) ? { OR: JSON.parse(filter) } : {};
-    const searchFilter = search
+    let skip = (Number(pageNumber) - 1) * Number(pageSize);
+    // let where = isEmpty(JSON.parse(filter)) ? { OR: JSON.parse(filter) } : {};
+    let searchFilter = search
       ? {
           OR: [
             {
@@ -85,7 +85,7 @@ export default async function handler(
         }
       : {};
 
-    const requests = await prisma.request.findMany({
+    let requests = await prisma.request.findMany({
       where: {
         userId: session.user.id,
         ...(user_id && { user_id: user_id }),
