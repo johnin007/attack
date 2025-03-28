@@ -1,19 +1,19 @@
 import { useUsageData } from "@/lib/hooks/api/useUsageData";
 import { format } from "date-fns";
 
-export let useUsageDataCharts = (startDate: Date, endDate: Date) => {
-  let query = useUsageData(startDate, endDate);
+export const useUsageDataCharts = (startDate: Date, endDate: Date) => {
+  const query = useUsageData(startDate, endDate);
 
   if (query.some((result) => result.isLoading || result.isError)) {
     return { data: [], loading: true };
   }
 
-  let data = query.map((result) => result.data);
+  const data = query.map((result) => result.data);
 
-  let groupedData = data
+  const groupedData = data
     .flatMap((day) => day!.data)
     .reduce((acc, cur) => {
-      let date = format(new Date(cur.aggregation_timestamp * 1000), "h:mm a");
+      const date = format(new Date(cur.aggregation_timestamp * 1000), "h:mm a");
 
       acc.push({
         date: date,
@@ -25,22 +25,22 @@ export let useUsageDataCharts = (startDate: Date, endDate: Date) => {
       return acc;
     }, [] as { [key: string]: any });
 
-  let totalCountContext = Object.values(groupedData).reduce(
+  const totalCountContext = Object.values(groupedData).reduce(
     (acc, cur) => acc + cur.context,
     0
   );
 
-  let totalCountGenerated = Object.values(groupedData).reduce(
+  const totalCountGenerated = Object.values(groupedData).reduce(
     (acc, cur) => acc + cur.generated,
     0
   );
 
-  let totalCountRequests = Object.values(groupedData).reduce(
+  const totalCountRequests = Object.values(groupedData).reduce(
     (acc, cur) => acc + cur.requests,
     0
   );
 
-  let chartData = [...Object.entries(groupedData)]
+  const chartData = [...Object.entries(groupedData)]
     .map(([date, snapshotCosts]) => {
       return {
         date,
