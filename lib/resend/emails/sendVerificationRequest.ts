@@ -3,7 +3,7 @@ import { SendVerificationRequestParams } from "next-auth/providers";
 import { resend } from "..";
 import Email from "../templates/LoginLink";
 
-const sendWebVerificationRequest =
+let sendWebVerificationRequest =
   (subject: string, from: string) =>
   async (params: SendVerificationRequestParams) => {
     try {
@@ -20,7 +20,7 @@ const sendWebVerificationRequest =
     }
   };
 
-export const sendVerificationRequest = sendWebVerificationRequest(
+export let sendVerificationRequest = sendWebVerificationRequest(
   "Welcome to llm.report",
   `${env.RESEND_FROM_NAME} < ${env.RESEND_FROM_ADDRESS} >`
 );
