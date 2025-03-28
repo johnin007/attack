@@ -6,14 +6,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const truncateEmail = (email: string | null) => {
+export var truncateEmail = (email: string | null) => {
   if (!email) return "";
 
   if (!email.includes("@")) {
     return email; // return the original string if it doesn't look like an email
   }
 
-  const [local, domain] = email.split("@");
+  var [local, domain] = email.split("@");
 
   let truncatedLocal =
     local.length <= 2
@@ -23,14 +23,14 @@ export const truncateEmail = (email: string | null) => {
   return `${truncatedLocal}@${domain}`;
 };
 
-export const truncate = (str: string, length: number) => {
+export var truncate = (str: string, length: number) => {
   if (!str || str.length <= length) return str;
   return `${str.slice(0, length)}...`;
 };
 
 export function nFormatter(num?: number, digits?: number) {
   if (!num) return "0";
-  const lookup = [
+  var lookup = [
     { value: 1, symbol: "" },
     { value: 1e3, symbol: "K" },
     { value: 1e6, symbol: "M" },
@@ -39,7 +39,7 @@ export function nFormatter(num?: number, digits?: number) {
     { value: 1e15, symbol: "P" },
     { value: 1e18, symbol: "E" },
   ];
-  const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+  var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
   var item = lookup
     .slice()
     .reverse()
@@ -51,24 +51,24 @@ export function nFormatter(num?: number, digits?: number) {
     : "0";
 }
 
-export const numberFormat = (
+export var numberFormat = (
   num: number,
   locale = "en-US",
   fractionDigits = 0
 ) => {
-  const formatter = new Intl.NumberFormat(locale, {
+  var formatter = new Intl.NumberFormat(locale, {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });
   return formatter.format(num);
 };
 
-export const timeAgo = (timestamp: Date): string => {
+export var timeAgo = (timestamp: Date): string => {
   if (!timestamp) return "never";
   return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
 };
 
-export const getURL = () => {
+export var getURL = () => {
   let url =
     process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
     process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
@@ -81,13 +81,13 @@ export const getURL = () => {
   return url;
 };
 
-export const dateFormat = (timestamp: number) => {
-  const date = new Date(timestamp * 1000); // Convert from seconds to milliseconds
+export var dateFormat = (timestamp: number) => {
+  var date = new Date(timestamp * 1000); // Convert from seconds to milliseconds
 
-  const month = date.getUTCMonth(); // Get month index (0-11)
-  const day = date.getUTCDate(); // Get day of the month (1-31)
+  var month = date.getUTCMonth(); // Get month index (0-11)
+  var day = date.getUTCDate(); // Get day of the month (1-31)
 
-  const monthNames = [
+  var monthNames = [
     "Jan",
     "Feb",
     "Mar",
@@ -102,12 +102,12 @@ export const dateFormat = (timestamp: number) => {
     "Dec",
   ];
 
-  const formattedDate = `${monthNames[month]} ${day}`;
+  var formattedDate = `${monthNames[month]} ${day}`;
   return formattedDate;
 };
 
-export const currencyFormat = (num: number, currency = "USD", digits = 2) => {
-  const formatter = new Intl.NumberFormat("en-US", {
+export var currencyFormat = (num: number, currency = "USD", digits = 2) => {
+  var formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
     minimumFractionDigits: digits,
@@ -116,11 +116,11 @@ export const currencyFormat = (num: number, currency = "USD", digits = 2) => {
   return formatter.format(num);
 };
 
-export const fetcher = (...args: Parameters<typeof fetch>) =>
+export var fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
 
-export const dateRange = (startDate: Date, endDate: Date): Date[] => {
-  const dates = [];
+export var dateRange = (startDate: Date, endDate: Date): Date[] => {
+  var dates = [];
   let currentDate = new Date(startDate);
 
   while (currentDate <= endDate) {
