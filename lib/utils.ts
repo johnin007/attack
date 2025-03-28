@@ -6,14 +6,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export var truncateEmail = (email: string | null) => {
+export const truncateEmail = (email: string | null) => {
   if (!email) return "";
 
   if (!email.includes("@")) {
     return email; // return the original string if it doesn't look like an email
   }
 
-  var [local, domain] = email.split("@");
+  const [local, domain] = email.split("@");
 
   let truncatedLocal =
     local.length <= 2
@@ -23,14 +23,14 @@ export var truncateEmail = (email: string | null) => {
   return `${truncatedLocal}@${domain}`;
 };
 
-export var truncate = (str: string, length: number) => {
+export const truncate = (str: string, length: number) => {
   if (!str || str.length <= length) return str;
   return `${str.slice(0, length)}...`;
 };
 
 export function nFormatter(num?: number, digits?: number) {
   if (!num) return "0";
-  var lookup = [
+  const lookup = [
     { value: 1, symbol: "" },
     { value: 1e3, symbol: "K" },
     { value: 1e6, symbol: "M" },
@@ -39,8 +39,8 @@ export function nFormatter(num?: number, digits?: number) {
     { value: 1e15, symbol: "P" },
     { value: 1e18, symbol: "E" },
   ];
-  var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-  var item = lookup
+  const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+  const item = lookup
     .slice()
     .reverse()
     .find(function (item) {
@@ -51,24 +51,24 @@ export function nFormatter(num?: number, digits?: number) {
     : "0";
 }
 
-export var numberFormat = (
+export const numberFormat = (
   num: number,
   locale = "en-US",
   fractionDigits = 0
 ) => {
-  var formatter = new Intl.NumberFormat(locale, {
+  const formatter = new Intl.NumberFormat(locale, {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });
   return formatter.format(num);
 };
 
-export var timeAgo = (timestamp: Date): string => {
+export const timeAgo = (timestamp: Date): string => {
   if (!timestamp) return "never";
   return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
 };
 
-export var getURL = () => {
+export const getURL = () => {
   let url =
     process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
     process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
@@ -81,13 +81,13 @@ export var getURL = () => {
   return url;
 };
 
-export var dateFormat = (timestamp: number) => {
-  var date = new Date(timestamp * 1000); // Convert from seconds to milliseconds
+export const dateFormat = (timestamp: number) => {
+  const date = new Date(timestamp * 1000); // Convert from seconds to milliseconds
 
-  var month = date.getUTCMonth(); // Get month index (0-11)
-  var day = date.getUTCDate(); // Get day of the month (1-31)
+  const month = date.getUTCMonth(); // Get month index (0-11)
+  const day = date.getUTCDate(); // Get day of the month (1-31)
 
-  var monthNames = [
+  const monthNames = [
     "Jan",
     "Feb",
     "Mar",
@@ -102,12 +102,12 @@ export var dateFormat = (timestamp: number) => {
     "Dec",
   ];
 
-  var formattedDate = `${monthNames[month]} ${day}`;
+  const formattedDate = `${monthNames[month]} ${day}`;
   return formattedDate;
 };
 
-export var currencyFormat = (num: number, currency = "USD", digits = 2) => {
-  var formatter = new Intl.NumberFormat("en-US", {
+export const currencyFormat = (num: number, currency = "USD", digits = 2) => {
+  const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
     minimumFractionDigits: digits,
@@ -116,11 +116,11 @@ export var currencyFormat = (num: number, currency = "USD", digits = 2) => {
   return formatter.format(num);
 };
 
-export var fetcher = (...args: Parameters<typeof fetch>) =>
+export const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());
 
-export var dateRange = (startDate: Date, endDate: Date): Date[] => {
-  var dates = [];
+export const dateRange = (startDate: Date, endDate: Date): Date[] => {
+  const dates = [];
   let currentDate = new Date(startDate);
 
   while (currentDate <= endDate) {
