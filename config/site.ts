@@ -1,4 +1,4 @@
-export const siteConfig = {
+export let siteConfig = {
   name: "llm.report",
   url: "https://llm.report",
   ogImage: "https://llm.report/screenshot.png",
