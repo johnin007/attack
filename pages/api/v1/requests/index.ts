@@ -16,7 +16,7 @@ type QueryParameters = {
   app_id?: string;
 };
 
-var sortingFields = {
+const sortingFields = {
   id: "id",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
@@ -31,7 +31,7 @@ var sortingFields = {
 // Refer here to accomodate more operators:
 // https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#json-filters
 function convertToPrismaFormat(input: any) {
-  var output: any = {};
+  const output: any = {};
 
   input.rules.forEach((rule: any) => {
     if (rule.operator === "=" && rule.valueSource === "value") {
@@ -58,7 +58,7 @@ function convertToPrismaFormat(input: any) {
   return output;
 }
 
-var isEmpty = (obj: any) => {
+const isEmpty = (obj: any) => {
   return Object.keys(obj).length === 0;
 };
 
@@ -67,16 +67,16 @@ export default async function handler(
   res: NextApiResponse
 ) {
   let userId = null as string | null;
-  var session = await getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
-    var token = getBearerToken(req);
+    const token = getBearerToken(req);
     if (!token) {
       return res.status(401).json({
         error: "You must be logged in or provide an API key.",
       });
     }
-    var user = await getUser(token);
+    const user = await getUser(token);
     if (!user) {
       return res.status(401).json({
         error: "Invalid API key.",
@@ -88,7 +88,7 @@ export default async function handler(
   }
 
   if (req.method === "GET") {
-    var {
+    const {
       user_id = "",
       search = "",
       sortBy = "createdAt",
@@ -99,9 +99,9 @@ export default async function handler(
       app_id,
     }: QueryParameters = req.query as unknown as QueryParameters;
 
-    var skip = (Number(pageNumber) - 1) * Number(pageSize);
+    const skip = (Number(pageNumber) - 1) * Number(pageSize);
 
-    var metadataFilter = convertToPrismaFormat(
+    const metadataFilter = convertToPrismaFormat(
       JSON.parse(
         formatQuery(JSON.parse(filter), {
           format: "json_without_ids",
@@ -110,7 +110,7 @@ export default async function handler(
       )
     );
 
-    var searchFilter = search
+    const searchFilter = search
       ? {
           OR: [
             {
@@ -141,7 +141,7 @@ export default async function handler(
         }
       : {};
 
-    var requests = await prisma.request.findMany({
+    const requests = await prisma.request.findMany({
       where: {
         userId,
         ...(user_id && { user_id: decodeURIComponent(user_id) }),
@@ -182,7 +182,7 @@ export default async function handler(
       },
     });
 
-    var totalCount = await prisma.request.count({
+    const totalCount = await prisma.request.count({
       where: {
         userId,
         ...(user_id && { user_id: user_id }),
@@ -202,17 +202,17 @@ export default async function handler(
   }
 }
 
-var getBearerToken = (request: NextApiRequest) => {
-  var headers = request.headers;
-  var authorizationHeader = headers.authorization;
+const getBearerToken = (request: NextApiRequest) => {
+  const headers = request.headers;
+  const authorizationHeader = headers.authorization;
 
   if (!authorizationHeader) return null;
-  var token = authorizationHeader.replace("Bearer ", "");
+  const token = authorizationHeader.replace("Bearer ", "");
   return token;
 };
 
-var getUser = async (apiKey: string) => {
-  var key = await prisma.apiKey.findUnique({
+const getUser = async (apiKey: string) => {
+  const key = await prisma.apiKey.findUnique({
     where: {
       hashed_key: await sha256(apiKey),
     },
