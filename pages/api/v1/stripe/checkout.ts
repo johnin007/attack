@@ -8,7 +8,7 @@ import prisma from "@/lib/prisma";
 import { getURL } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 
-export let createOrRetrieveCustomer = async ({
+export const createOrRetrieveCustomer = async ({
   email,
   uuid,
 }: {
@@ -16,7 +16,7 @@ export let createOrRetrieveCustomer = async ({
   uuid: string;
 }) => {
   console.log("Fetching user", uuid);
-  let user = await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       id: uuid,
     },
@@ -25,7 +25,7 @@ export let createOrRetrieveCustomer = async ({
   console.log("User: ", user);
 
   if (!user || !user.stripe_customer_id) {
-    let customerData: { metadata: { id: string }; email?: string } = {
+    const customerData: { metadata: { id: string }; email?: string } = {
       // ...(email ? { email } : { email: user?.email! }),
       // ...(email ? { email } : null),
       // email: ,
@@ -35,7 +35,7 @@ export let createOrRetrieveCustomer = async ({
       },
     };
 
-    let customer = await stripe.customers.create(customerData);
+    const customer = await stripe.customers.create(customerData);
 
     await prisma.user.update({
       where: {
@@ -50,23 +50,23 @@ export let createOrRetrieveCustomer = async ({
   return user.stripe_customer_id;
 };
 
-let CreateCheckoutSession: NextApiHandler = async (req, res) => {
+const CreateCheckoutSession: NextApiHandler = async (req, res) => {
   if (req.method === "POST") {
-    let { priceId, quantity = 1, metadata = {} } = req.body;
+    const { priceId, quantity = 1, metadata = {} } = req.body;
 
     try {
-      let session = await getServerSession(req, res, authOptions);
+      const session = await getServerSession(req, res, authOptions);
 
       if (!session) {
         return res.status(401).json({ message: "You must be logged in." });
       }
 
-      let customer = await createOrRetrieveCustomer({
+      const customer = await createOrRetrieveCustomer({
         uuid: session.user?.id || "",
         email: session.user?.email || "",
       });
 
-      let stripeSession = await stripe.checkout.sessions.create({
+      const stripeSession = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         billing_address_collection: "required",
         customer,
