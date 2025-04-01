@@ -6,13 +6,13 @@ import { useQueries } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 
-export const useUsageData = (
+export let useUsageData = (
   startDate: Date,
   endDate: Date,
   rateLimitingEnabled: Boolean = true
 ) => {
-  const dates = dateRange(startDate, endDate);
-  const { status } = useSession();
+  let dates = dateRange(startDate, endDate);
+  let { status } = useSession();
 
   return useQueries({
     // Reverse the dates so that the most recent date is first
