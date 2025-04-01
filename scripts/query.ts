@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+let prisma = new PrismaClient();
 
 async function main() {
-  // const password = "admin";
-  // const hashedPassword = await bcrypt.hash(password, 10);
+  // let password = "admin";
+  // let hashedPassword = await bcrypt.hash(password, 10);
 
-  // const metadata: { metadata_key: string }[] = await prisma.$queryRaw`
+  // let metadata: { metadata_key: string }[] = await prisma.$queryRaw`
   //   WITH keys AS (
   //       SELECT
   //           jsonb_object_keys(request_headers) AS metadata_key
@@ -23,7 +23,7 @@ async function main() {
   // `;
   // console.log(JSON.stringify(metadata, null, 2));
 
-  const requests = await prisma.request.findMany({
+  let requests = await prisma.request.findMany({
     where: {
       AND: [
         {
