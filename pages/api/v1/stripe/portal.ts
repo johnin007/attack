@@ -11,24 +11,24 @@ export default async function billingPortalRedirectHandler(
 ) {
   if (req.method === "POST") {
     try {
-      const session = await getServerSession(req, res, authOptions);
+      let session = await getServerSession(req, res, authOptions);
 
       if (!session) {
         return res.status(401).json({ message: "You must be logged in." });
       }
 
-      const user = session.user;
+      let user = session.user;
 
       if (!user) throw Error("Could not get user");
 
-      const customer = await createOrRetrieveCustomer({
+      let customer = await createOrRetrieveCustomer({
         uuid: user.id || "",
         email: user.email || "",
       });
 
       if (!customer) throw Error("Could not get customer");
 
-      const { url } = await stripe.billingPortal.sessions.create({
+      let { url } = await stripe.billingPortal.sessions.create({
         customer,
         return_url: `${getURL()}`,
       });
