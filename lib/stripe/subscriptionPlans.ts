@@ -14,7 +14,7 @@ export interface SubscriptionPlans {
   production: SubscriptionPlan;
 }
 
-export const subscriptionPlans = {
+export let subscriptionPlans = {
   development: {
     free: {
       monthly: "https://buy.stripe.com/test_9AQ7use7tcS5bhm289",
