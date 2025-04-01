@@ -7,16 +7,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let session = await getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });
   }
 
   if (req.method === "DELETE") {
-    let { id } = req.query;
+    const { id } = req.query;
 
-    let key = await prisma.apiKey.findUnique({
+    const key = await prisma.apiKey.findUnique({
       where: {
         id: id as string,
       },
