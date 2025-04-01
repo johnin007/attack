@@ -11,27 +11,27 @@ import {
   Snapshot,
 } from "./types";
 
-export let FADE_LEFT_ANIMATION_VARIANTS = {
+export const FADE_LEFT_ANIMATION_VARIANTS = {
   hidden: { opacity: 0, x: 10 },
   show: { opacity: 1, x: 0, transition: { type: "spring" } },
 };
 
-export let FADE_DOWN_ANIMATION_VARIANTS = {
+export const FADE_DOWN_ANIMATION_VARIANTS = {
   hidden: { opacity: 0, y: -10 },
   show: { opacity: 1, y: 0, transition: { type: "spring" } },
 };
 
-export let FADE_DOWN_ANIMATION_VARIANTS_DELAYED = {
+export const FADE_DOWN_ANIMATION_VARIANTS_DELAYED = {
   hidden: { opacity: 0, y: -10 },
   show: { opacity: 1, y: 0, transition: { type: "spring", delay: 0.7 } },
 };
 
-export let FADE_UP_ANIMATION_VARIANTS = {
+export const FADE_UP_ANIMATION_VARIANTS = {
   hidden: { opacity: 0, y: 10 },
   show: { opacity: 1, y: 0, transition: { type: "spring" } },
 };
 
-export let CATEGORIES: Category[] = [
+export const CATEGORIES: Category[] = [
   // "Total Cost ($)",
   "Audio models",
   "Embedding models",
@@ -44,13 +44,13 @@ export let CATEGORIES: Category[] = [
   "Image models",
 ];
 
-export let IMAGE_RESOLUTIONS: ImageResolution[] = [
+export const IMAGE_RESOLUTIONS: ImageResolution[] = [
   "256x256",
   "512x512",
   "1024x1024",
 ];
 
-export let CHAT_GPT4_MODELS: ChatCompletionModel[] = [
+export const CHAT_GPT4_MODELS: ChatCompletionModel[] = [
   "gpt-4",
   "gpt-4-0314",
   "gpt-4-0613",
@@ -59,7 +59,7 @@ export let CHAT_GPT4_MODELS: ChatCompletionModel[] = [
   "gpt-4-1106-preview",
   "gpt-4-1106-vision-preview",
 ];
-export let CHAT_GPT3_MODELS: ChatCompletionModel[] = [
+export const CHAT_GPT3_MODELS: ChatCompletionModel[] = [
   "gpt-3.5-turbo",
   "gpt-3.5-turbo-0301",
   "gpt-3.5-turbo-0613",
@@ -67,12 +67,12 @@ export let CHAT_GPT3_MODELS: ChatCompletionModel[] = [
   "gpt-3.5-turbo-0125",
 ];
 
-export let CHAT_MODELS: ChatCompletionModel[] = [
+export const CHAT_MODELS: ChatCompletionModel[] = [
   ...CHAT_GPT3_MODELS,
   ...CHAT_GPT4_MODELS,
 ];
 
-export let COMPLETION_MODELS: CompletionModel[] = [
+export const COMPLETION_MODELS: CompletionModel[] = [
   "text-ada-001",
   "text-babbage-001",
   "text-curie-001",
@@ -80,12 +80,12 @@ export let COMPLETION_MODELS: CompletionModel[] = [
   "text-davinci-003",
 ];
 
-export let EDIT_MODELS: EditModel[] = [
+export const EDIT_MODELS: EditModel[] = [
   "text-davinci-edit-001",
   "code-davinci-edit-001",
 ];
 
-export let FINE_TUNED_MODELS: FineTunedModel[] = [
+export const FINE_TUNED_MODELS: FineTunedModel[] = [
   "text-davinci-003",
   "text-davinci-002",
   "text-curie-001",
@@ -93,15 +93,15 @@ export let FINE_TUNED_MODELS: FineTunedModel[] = [
   "text-ada-001",
 ];
 
-export let EMBEDDING_MODELS: EmbeddingModel[] = [
+export const EMBEDDING_MODELS: EmbeddingModel[] = [
   "text-embedding-ada-002",
   "text-embedding-ada-002-v2",
   "text-search-ada-doc-001",
 ];
 
-export let AUDIO_MODELS: AudioModel[] = ["whisper-1", "whisper-2"];
+export const AUDIO_MODELS: AudioModel[] = ["whisper-1", "whisper-2"];
 
-export let COLORS: Color[] = [
+export const COLORS: Color[] = [
   "blue",
   "purple",
   "amber",
@@ -113,7 +113,7 @@ export let COLORS: Color[] = [
   "pink",
 ];
 
-export let CATEGORY_TO_COLOR: Record<Category, Color> = {
+export const CATEGORY_TO_COLOR: Record<Category, Color> = {
   // "Total Cost ($)": "blue",
   "Audio models": "purple",
   "GPT-3.5 Turbo": "amber",
@@ -126,7 +126,7 @@ export let CATEGORY_TO_COLOR: Record<Category, Color> = {
   "Base models": "pink",
 };
 
-export let MODEL_TO_COLOR: Record<Snapshot, Color> = {
+export const MODEL_TO_COLOR: Record<Snapshot, Color> = {
   // "gpt-3.5-turbo-0301": "amber",
   // "text-embedding-ada-002-v2": "rose",
   // "text-davinci:003": "lime",
@@ -179,7 +179,7 @@ export let MODEL_TO_COLOR: Record<Snapshot, Color> = {
   "1024x1024": "sky",
 };
 
-export let animationVariant = {
+export const animationVariant = {
   hidden: {},
   show: {
     transition: {
@@ -199,7 +199,7 @@ interface PriceIds {
   };
 }
 
-export let priceIds: PriceIds = {
+export const priceIds: PriceIds = {
   test: {
     Developer: {
       month: "price_1N1fnCB24wj8TkEzsPjdXlFm",
@@ -232,15 +232,15 @@ export let priceIds: PriceIds = {
   },
 };
 
-export let LOCAL_STORAGE_KEY = "openai-key";
-export let LOCAL_STORAGE_ORG_ID = "openai-org-id";
-export let FIRST_VISIT_KEY = "first-visit";
-export let FIRST_VISIT_AFTER_LOGIN = "first-visit-after-login";
-export let SELECTION_KEY = "selection";
-export let CATEGORIES_KEY = "categories";
+export const LOCAL_STORAGE_KEY = "openai-key";
+export const LOCAL_STORAGE_ORG_ID = "openai-org-id";
+export const FIRST_VISIT_KEY = "first-visit";
+export const FIRST_VISIT_AFTER_LOGIN = "first-visit-after-login";
+export const SELECTION_KEY = "selection";
+export const CATEGORIES_KEY = "categories";
 
 // https://openai.com/pricing
-export let MODEL_COST: { [key in Snapshot]?: number } = {
+export const MODEL_COST: { [key in Snapshot]?: number } = {
   // Chat models per token (GPT-4)
   // TODO: GPT-4 Output is different
   // {
@@ -289,7 +289,7 @@ export let MODEL_COST: { [key in Snapshot]?: number } = {
 };
 
 // https://openai.com/pricing
-export let IMAGE_MODEL_COST: { [key in ImageResolution]: number } = {
+export const IMAGE_MODEL_COST: { [key in ImageResolution]: number } = {
   "1024x1024": 0.02, // per 1 image
   "512x512": 0.018, // per 1 image
   "256x256": 0.016, // per 1 image
