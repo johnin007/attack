@@ -36,23 +36,23 @@ export class OpenAI {
   }
 
   async getUsage(date: Date | string): Promise<UsageResponse> {
-    let key = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const key = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!key) throw new Error("OpenAI key not set");
     OpenAI.setKey(key.replaceAll('"', ""));
 
-    let orgId = localStorage.getItem(LOCAL_STORAGE_ORG_ID);
+    const orgId = localStorage.getItem(LOCAL_STORAGE_ORG_ID);
     if (orgId) OpenAI.setOrg(orgId.replaceAll('"', ""));
 
     if (typeof date === "string") {
       date = new Date(date);
     }
 
-    let query = {
+    const query = {
       date: format(date, "yyyy-MM-dd"),
     };
 
     try {
-      let res = await axios.get(
+      const res = await axios.get(
         `https://api.openai.com/v1/usage?${new URLSearchParams(query)}`,
         {
           headers: {
@@ -72,11 +72,11 @@ export class OpenAI {
     startDate: Date | string,
     endDate: Date | string
   ): Promise<BillingUsageResponse> {
-    let key = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const key = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!key) throw new Error("OpenAI key not set");
     OpenAI.setKey(key.replaceAll('"', ""));
 
-    let orgId = localStorage.getItem(LOCAL_STORAGE_ORG_ID);
+    const orgId = localStorage.getItem(LOCAL_STORAGE_ORG_ID);
     if (orgId) OpenAI.setOrg(orgId.replaceAll('"', ""));
 
     if (typeof startDate === "string") {
@@ -87,7 +87,7 @@ export class OpenAI {
       endDate = new Date(endDate);
     }
 
-    let query: {
+    const query: {
       start_date: string;
       end_date: string;
     } = {
@@ -95,7 +95,7 @@ export class OpenAI {
       end_date: format(endDate, "yyyy-MM-dd"),
     };
 
-    let res = await axios.get<BillingUsageResponse>(
+    const res = await axios.get<BillingUsageResponse>(
       `https://api.openai.com/dashboard/billing/usage?${new URLSearchParams(
         query
       )}`,
@@ -110,14 +110,14 @@ export class OpenAI {
   }
 
   async getSubscription(): Promise<BillingSubscriptionResponse> {
-    let key = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const key = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!key) throw new Error("OpenAI key not set");
     OpenAI.setKey(key.replaceAll('"', ""));
 
-    let orgId = localStorage.getItem(LOCAL_STORAGE_ORG_ID);
+    const orgId = localStorage.getItem(LOCAL_STORAGE_ORG_ID);
     if (orgId) OpenAI.setOrg(orgId.replaceAll('"', ""));
 
-    let response = await axios.get<BillingSubscriptionResponse>(
+    const response = await axios.get<BillingSubscriptionResponse>(
       `https://api.openai.com/dashboard/billing/subscription`,
       {
         headers: {
@@ -131,11 +131,11 @@ export class OpenAI {
   }
 
   async getUsers(): Promise<OrganizationUsers> {
-    let key = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const key = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!key) throw new Error("OpenAI key not set");
     OpenAI.setKey(key.replaceAll('"', ""));
 
-    let response = await axios.get<OrganizationUsers>(
+    const response = await axios.get<OrganizationUsers>(
       `https://api.openai.com/v1/organizations/${OpenAI.orgId}/users`,
       {
         headers: {
@@ -153,7 +153,7 @@ export class OpenAI {
     }
 
     try {
-      let response = await axios.get(
+      const response = await axios.get(
         `https://api.openai.com/dashboard/billing/subscription`,
         {
           headers: {
@@ -172,6 +172,6 @@ export class OpenAI {
   }
 }
 
-let openai = new OpenAI();
+const openai = new OpenAI();
 
 export default openai;
