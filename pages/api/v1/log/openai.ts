@@ -4,7 +4,7 @@ import { clickhouseClient } from "@/lib/clickhouse/clickhouseClient";
 import { z } from "zod";
 import { sha256 } from "../keys";
 
-const schema = z.object({
+let schema = z.object({
   provider_id: z.string(),
   user_id: z.string().optional(),
   url: z.string(),
@@ -34,9 +34,9 @@ export default async function handler(
   }
 
   // Validate request body
-  const response = schema.safeParse(req.body);
+  let response = schema.safeParse(req.body);
   if (!response.success) {
-    const { errors } = response.error;
+    let { errors } = response.error;
     console.log("errors", errors);
 
     return res.status(400).json({
@@ -45,7 +45,7 @@ export default async function handler(
   }
 
   // get llm.report api key
-  const llmApikey = getLlmReportApiKey(req);
+  let llmApikey = getLlmReportApiKey(req);
   if (!llmApikey) {
     return res.status(401).json({
       message: "Go to https://llm.report/ to get an API key.",
@@ -54,7 +54,7 @@ export default async function handler(
   }
 
   // get llm.report user from api key
-  const user = await getUser(llmApikey);
+  let user = await getUser(llmApikey);
   if (!user) {
     return res.status(401).json({
       message: "Go to https://llm.report/ to get an API key.",
@@ -64,7 +64,7 @@ export default async function handler(
 
   // insert request into clickhouse
   try {
-    const body = {
+    let body = {
       ...req.body,
       llm_report_user_id: user.id,
       provider: "openai",
@@ -84,16 +84,16 @@ export default async function handler(
   }
 }
 
-const getLlmReportApiKey = (request: NextApiRequest) => {
-  const headers = request.headers;
-  const apiKey = headers["x-api-key"];
+let getLlmReportApiKey = (request: NextApiRequest) => {
+  let headers = request.headers;
+  let apiKey = headers["x-api-key"];
 
   if (!apiKey) return null;
   return apiKey as string;
 };
 
-const getUser = async (apiKey: string) => {
-  const key = await prisma.apiKey.findUnique({
+let getUser = async (apiKey: string) => {
+  let key = await prisma.apiKey.findUnique({
     where: {
       hashed_key: await sha256(apiKey),
     },
