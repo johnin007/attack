@@ -6,7 +6,7 @@ interface DocsConfig {
   sidebarNav: SidebarNavItem[];
 }
 
-export let docsConfig: DocsConfig = {
+export const docsConfig: DocsConfig = {
   mainNav: [
     {
       title: "Home",
