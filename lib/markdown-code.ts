@@ -9,7 +9,7 @@ import {
   getHighlighter,
 } from "shiki-processor";
 
-const CurlLogs = `
+var CurlLogs = `
 \`\`\`bash
 curl https://api.openai.com/v1/chat/completions // [!code --] \\
 curl https://api.openai.withlogging.com/v1/chat/completions // [!code ++] \\
@@ -22,7 +22,7 @@ curl https://api.openai.withlogging.com/v1/chat/completions // [!code ++] \\
   }'
 `;
 
-const JSLogs = `
+var JSLogs = `
 \`\`\`js
 fetch("https://api.openai.com/v1/chat/completions", { // [!code --]
 fetch("https://api.openai.withlogging.com/v1/chat/completions", { // [!code ++]
@@ -40,12 +40,12 @@ fetch("https://api.openai.withlogging.com/v1/chat/completions", { // [!code ++]
 \`\`\`
 `;
 
-const NodejsLogs = `
+var NodejsLogs = `
 
 \`\`\`js
 import { Configuration, OpenAIApi } from "openai";
 
-const configuration = new Configuration({
+var configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY, 
   basePath: "https://api.openai.com/v1",  // [!code --]
   basePath: "https://api.openai.withlogging.com/v1",  // [!code ++]
@@ -56,9 +56,9 @@ const configuration = new Configuration({
   }
 });
 
-const openai = new OpenAIApi(configuration);
+var openai = new OpenAIApi(configuration);
 
-const completion = await openai.createChatCompletion({
+var completion = await openai.createChatCompletion({
   model: "gpt-3.5-turbo",
   messages: [
     { role: "system", content: "You are a helpful assistant." },
@@ -68,7 +68,7 @@ const completion = await openai.createChatCompletion({
 \`\`\`
 `;
 
-const PythonLogs = `
+var PythonLogs = `
 \`\`\`python
 import os
 import openai
@@ -91,7 +91,7 @@ print(completion.choices[0].message)
 \`\`\`
 `;
 
-const CurlUser = `
+var CurlUser = `
 \`\`\`bash
 curl https://api.openai.com/v1/chat/completions // [!code --] \\
 curl https://api.openai.withlogging.com/v1/chat/completions // [!code ++] \\
@@ -105,7 +105,7 @@ curl https://api.openai.withlogging.com/v1/chat/completions // [!code ++] \\
   }'
 `;
 
-const JSUser = `
+var JSUser = `
 \`\`\`js
 fetch("https://api.openai.com/v1/chat/completions", { // [!code --]
 fetch("https://api.openai.withlogging.com/v1/chat/completions", { // [!code ++]
@@ -124,12 +124,12 @@ fetch("https://api.openai.withlogging.com/v1/chat/completions", { // [!code ++]
 \`\`\`
 `;
 
-const NodejsUser = `
+var NodejsUser = `
 
 \`\`\`js
 import { Configuration, OpenAIApi } from "openai";
 
-const configuration = new Configuration({
+var configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY, 
   basePath: "https://api.openai.com/v1",  // [!code --]
   basePath: "https://api.openai.withlogging.com/v1",  // [!code ++]
@@ -141,9 +141,9 @@ const configuration = new Configuration({
   }
 });
 
-const openai = new OpenAIApi(configuration);
+var openai = new OpenAIApi(configuration);
 
-const completion = await openai.createChatCompletion({
+var completion = await openai.createChatCompletion({
   model: "gpt-3.5-turbo",
   messages: [
     { role: "system", content: "You are a helpful assistant." },
@@ -153,7 +153,7 @@ const completion = await openai.createChatCompletion({
 \`\`\`
 `;
 
-const PythonUser = `
+var PythonUser = `
 \`\`\`python
 import os
 import openai
@@ -177,7 +177,7 @@ print(completion.choices[0].message)
 \`\`\`
 `;
 
-const highlighterConfig = {
+var highlighterConfig = {
   theme: "material-theme-palenight",
   processors: [
     createDiffProcessor(),
@@ -190,7 +190,7 @@ const highlighterConfig = {
         warning: ["highlighted", "warning"],
       }),
       postProcess: ({ code }) => {
-        const modifiedCode = code.replace(
+        var modifiedCode = code.replace(
           /(.withlogging)/g,
           '<span class="highlight-word">$1</span>'
         );
@@ -201,7 +201,7 @@ const highlighterConfig = {
   ],
 };
 
-const markdownConfig = {
+var markdownConfig = {
   html: true,
   linkify: true,
   typographer: true,
@@ -233,7 +233,7 @@ async function getHighlighterInstance(): Promise<Highlighter> {
 
 async function getMarkdownItInstance(): Promise<MarkdownIt> {
   if (!markdownItInstance) {
-    const highlighter = await getHighlighterInstance();
+    var highlighter = await getHighlighterInstance();
 
     markdownItInstance = new MarkdownIt({
       ...markdownConfig,
@@ -245,7 +245,7 @@ async function getMarkdownItInstance(): Promise<MarkdownIt> {
 }
 
 export async function getUsersCode(): Promise<CodeResults> {
-  const renderer = await getMarkdownItInstance();
+  var renderer = await getMarkdownItInstance();
   return {
     curl: renderer.render(CurlUser),
     js: renderer.render(JSUser),
@@ -255,7 +255,7 @@ export async function getUsersCode(): Promise<CodeResults> {
 }
 
 export async function getLogsCode(): Promise<CodeResults> {
-  const renderer = await getMarkdownItInstance();
+  var renderer = await getMarkdownItInstance();
   return {
     curl: renderer.render(CurlLogs),
     js: renderer.render(JSLogs),
