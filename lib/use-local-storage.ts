@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
-const useLocalStorage = <T>(
+var useLocalStorage = <T>(
   key: string,
   initialValue?: T,
   poll: boolean = false
 ): [T | null, (value: T) => void] => {
-  const [value, setValue] = useState<T | null>(() => {
+  var [value, setValue] = useState<T | null>(() => {
     if (typeof window !== "undefined") {
-      const storedValue = localStorage.getItem(key);
+      var storedValue = localStorage.getItem(key);
       return storedValue ? JSON.parse(storedValue) : initialValue ?? null;
     } else {
       return initialValue ?? null;
@@ -16,7 +16,7 @@ const useLocalStorage = <T>(
 
   // Listen to storage change events (changes from other tabs)
   useEffect(() => {
-    const handleStorageChange = (event: StorageEvent) => {
+    var handleStorageChange = (event: StorageEvent) => {
       if (event.key === key) {
         setValue(
           event.newValue ? JSON.parse(event.newValue) : initialValue ?? null
@@ -35,8 +35,8 @@ const useLocalStorage = <T>(
   useEffect(() => {
     if (!poll) return;
     let prevValue = value;
-    const intervalId = setInterval(() => {
-      const storedValue = localStorage.getItem(key);
+    var intervalId = setInterval(() => {
+      var storedValue = localStorage.getItem(key);
       if (storedValue !== null && storedValue !== prevValue) {
         prevValue = JSON.parse(storedValue);
         setValue(JSON.parse(storedValue));
