@@ -6,8 +6,8 @@ interface UserWithSubscriptions extends User {
   subscriptions: Subscription[];
   payments: Payment[];
 }
-export const useUser = () => {
-  const { data, isLoading } = useSWR<{ user: UserWithSubscriptions }>(
+export let useUser = () => {
+  let { data, isLoading } = useSWR<{ user: UserWithSubscriptions }>(
     "/api/v1/me",
     fetcher
   );
