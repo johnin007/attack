@@ -22,8 +22,8 @@ declare global {
       };
     };
   };
-  var prisma: PrismaClient | ExtendedPrismaClient | any;
-  // var prisma: PrismaClient | undefined | any;
+  let prisma: PrismaClient | ExtendedPrismaClient | any;
+  // let prisma: PrismaClient | undefined | any;
 }
 
 const prisma =
