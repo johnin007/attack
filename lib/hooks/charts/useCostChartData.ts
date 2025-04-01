@@ -13,25 +13,25 @@ import { useUsageData } from "@/lib/hooks/api/useUsageData";
 import { Category, ImageResolution, Snapshot } from "@/lib/types";
 import { format } from "date-fns";
 
-export const useCostChartData = (
+export let useCostChartData = (
   startDate: Date,
   endDate: Date,
   categories: Category[],
   rateLimitingEnabled: boolean = true
 ) => {
-  const query = useUsageData(startDate, endDate, rateLimitingEnabled);
+  let query = useUsageData(startDate, endDate, rateLimitingEnabled);
 
   if (query.some((result) => result.isLoading || result.isError)) {
     return { data: [], loading: true };
   }
 
-  const data = query.map((result) => result.data);
+  let data = query.map((result) => result.data);
 
   // Group data by aggregation_timestamp and calculate costs
-  const groupedData = data
+  let groupedData = data
     .flatMap((day) => day!.data)
     .reduce((acc, cur) => {
-      const date = format(
+      let date = format(
         new Date(cur.aggregation_timestamp * 1000),
         "MMMM d, yyyy h:mm a"
       );
@@ -40,7 +40,7 @@ export const useCostChartData = (
         acc[date] = {};
       }
 
-      const cost =
+      let cost =
         MODEL_COST[cur.snapshot_id as Snapshot]! *
         (cur.n_generated_tokens_total + cur.n_context_tokens_total);
 
@@ -53,10 +53,10 @@ export const useCostChartData = (
       return acc;
     }, {} as { [key: string]: any });
 
-  const groupedDalleData = data
+  let groupedDalleData = data
     .flatMap((day) => day!.dalle_api_data)
     .reduce((acc, cur) => {
-      const date = format(
+      let date = format(
         new Date(cur.timestamp * 1000),
         "MMMM d, yyyy h:mm a"
       );
@@ -67,7 +67,7 @@ export const useCostChartData = (
         acc[date] = {};
       }
 
-      const cost =
+      let cost =
         IMAGE_MODEL_COST[cur.image_size as ImageResolution] * cur.num_images;
 
       if (!acc[date][cur.image_size]) {
@@ -79,7 +79,7 @@ export const useCostChartData = (
       return acc;
     }, {} as { [key: string]: any });
 
-  const chartData = [
+  let chartData = [
     ...Object.entries(groupedData),
     ...Object.entries(groupedDalleData),
   ]
@@ -94,32 +94,32 @@ export const useCostChartData = (
     });
 
   // // grouped by snapshot_id
-  const groupedData1 = data
+  let groupedData1 = data
     .flatMap((day) => day!.data)
     .reduce((acc, cur) => {
-      const snapshotId = cur.snapshot_id;
+      let snapshotId = cur.snapshot_id;
       if (!acc[snapshotId]) {
         acc[snapshotId] = [];
       }
       return acc;
     }, {} as { [key: string]: any });
 
-  const groupedDalleData1 = data
+  let groupedDalleData1 = data
     .flatMap((day) => day!.dalle_api_data)
     .reduce((acc, cur) => {
-      const snapshotId = cur.image_size;
+      let snapshotId = cur.image_size;
       if (!acc[snapshotId]) {
         acc[snapshotId] = [];
       }
       return acc;
     }, {} as { [key: string]: any });
 
-  const snapshots = [
+  let snapshots = [
     ...Object.keys(groupedData1),
     ...Object.keys(groupedDalleData1),
   ];
 
-  const selectedSnapshots = categories.flatMap((category) => {
+  let selectedSnapshots = categories.flatMap((category) => {
     switch (category) {
       case "Audio models":
         return AUDIO_MODELS;
