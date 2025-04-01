@@ -13,12 +13,12 @@ type ExtendedRequest = Partial<Request> & {
   cost: number; // Since you're adding this property manually
 };
 
-const dateSchema = z
+let dateSchema = z
   .string()
   .refine(
     (value) => {
-      const [year, month, day] = value.split("-");
-      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      let [year, month, day] = value.split("-");
+      let date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
       return !isNaN(date.getTime());
     },
     {
@@ -26,11 +26,11 @@ const dateSchema = z
     }
   )
   .transform((value) => {
-    const [year, month, day] = value.split("-");
+    let [year, month, day] = value.split("-");
     return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   });
 
-const QueryParameters = z.object({
+let QueryParameters = z.object({
   search: z.string().optional(),
   sortBy: z.enum(["id", "createdAt", "updatedAt"]).optional(),
   sortOrder: z.enum(["asc", "desc"]).optional(),
@@ -41,7 +41,7 @@ const QueryParameters = z.object({
   end: dateSchema.optional(),
 });
 
-const sortingFields = {
+let sortingFields = {
   id: "id",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
@@ -51,7 +51,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getServerSession(req, res, authOptions);
+  let session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: "You must be logged in." });
@@ -59,7 +59,7 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const {
+      let {
         search = "",
         sortBy = "createdAt",
         sortOrder = "desc",
@@ -70,9 +70,9 @@ export default async function handler(
         end = "",
       } = QueryParameters.parse(req.query);
 
-      // const skip = (Number(pageNumber) - 1) * Number(pageSize);
-      const where = JSON.parse(filter);
-      const searchFilter = search
+      // let skip = (Number(pageNumber) - 1) * Number(pageSize);
+      let where = JSON.parse(filter);
+      let searchFilter = search
         ? {
             OR: [
               {
@@ -84,7 +84,7 @@ export default async function handler(
           }
         : {};
 
-      const dateFilter: Partial<{
+      let dateFilter: Partial<{
         createdAt?: {
           gte?: Date;
           lte?: Date;
@@ -101,7 +101,7 @@ export default async function handler(
         }
       }
 
-      const requests = await prisma.request.findMany({
+      let requests = await prisma.request.findMany({
         where: {
           userId: session.user.id,
           ...where,
@@ -121,7 +121,7 @@ export default async function handler(
         },
       });
 
-      const filteredUsers: ExtendedRequest[] = requests
+      let filteredUsers: ExtendedRequest[] = requests
         .filter(
           (request: any) =>
             request.app_id !== null &&
@@ -141,9 +141,9 @@ export default async function handler(
           };
         });
 
-      const costsByAppId = filteredUsers.reduce(
+      let costsByAppId = filteredUsers.reduce(
         (acc, currentRequest) => {
-          const appId = currentRequest.app_id; // Corrected way to access app_id of the current request
+          let appId = currentRequest.app_id; // Corrected way to access app_id of the current request
 
           if (!appId) return acc; // Skip if app_id is not present
 
@@ -179,17 +179,17 @@ export default async function handler(
       // console.log(costsByAppId);
 
       // Sort by total_cost in descending order
-      const costsArray = Object.values(costsByAppId).sort(
+      let costsArray = Object.values(costsByAppId).sort(
         (a, b) => b.total_cost - a.total_cost
       );
 
       // Calculate skip based on pageNumber and pageSize
-      const skip = (pageNumber - 1) * pageSize;
+      let skip = (pageNumber - 1) * pageSize;
 
       // Implement pagination logic if necessary
-      const paginatedCosts = costsArray.slice(skip, skip + pageSize);
+      let paginatedCosts = costsArray.slice(skip, skip + pageSize);
 
-      const totalCount = costsArray.length;
+      let totalCount = costsArray.length;
 
       return res.status(200).json({
         apps: paginatedCosts,
